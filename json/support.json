@@ -1,0 +1,24 @@
+{
+  "Direct Support": [
+    {
+      "Name": "Mail",
+      "Description": "Send us an email.",
+      "URL": "mailto:contact@@vehicle-history.io"
+    },
+    {
+      "Name": "Submit A Github Issue",
+      "Description": "This entire developers portal is hosted on Github as a repository. Using your Github account you can submit an issue as part of the repository and we will respond as part of the regular support process.",
+      "URL": "https://github.com/vehicle-history/developers-portal"
+    },
+    {
+      "Name": "Google+",
+      "Description": "You are welcome to ping us on Google+ publicly, letting us now how we can help.",
+      "URL": "https://plus.google.com/104615536080263751555"
+    },
+    {
+      "Name": "Twitter",
+      "Description": "You are welcome to ping us on Twitter publicly, letting us now how we can help.",
+      "URL": "https://twitter.com/vehiclehistory_"
+    }
+  ]
+}

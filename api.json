@@ -1,0 +1,78 @@
+{
+  "name": "Developers portal",
+  "description": "",
+  "image": "https://s3.amazonaws.com/kinlane-productions/public-private-sector/black-puzzle-500.png",
+  "url": "https://github.com/vehicle-history/developers-portal/blob/gh-pages-vh/",
+  "apis": [
+    {
+      "name": "Festivals",
+      "hashUrl": "!/festivals/getFestivals",
+      "description": "Vehicle history API",
+      "image": "https://s3.amazonaws.com/kinlane-productions/public-private-sector/black-puzzle-500.png",
+      "human-url": "https://github.com/vehicle-history/developers-portal/blob/gh-pages-vh/api.html",
+      "machine-url": "https://github.com/vehicle-history/developers-portal/blob/gh-pages-vh/api-docs/swagger.json",
+      "tags": "facilities, government",
+      "urls": [
+        {
+          "type": "code",
+          "url": "https://github.com/vehicle-history/developers-portal/blob/gh-pages-vh/code.html"
+        },
+        {
+          "type": "swagger",
+          "url": "https://github.com/vehicle-history/developers-portal/blob/gh-pages-vh/api-docs/swagger.json"
+        },
+        {
+          "type": "support",
+          "url": "https://github.com/vehicle-history/developers-portal/blob/gh-pages-vh/support.html"
+        },
+        {
+          "type": "roadmap",
+          "url": "https://github.com/vehicle-history/developers-portal/blob/gh-pages-vh/roadmap.html"
+        },
+        {
+          "type": "blog",
+          "url": "https://github.com/vehicle-history/developers-portal/blob/gh-pages-vh/blog.html"
+        }
+      ],
+      "contact": [
+        {
+          "type": "email",
+          "url": "contact@vehicle-history.io"
+        },
+        {
+          "type": "twitter",
+          "url": "https://twitter.com/vehiclehistory_/"
+        }
+      ],
+      "meta": [
+        {
+          "key": "interface-license",
+          "vallue": "CC BY 3.0"
+        },
+        {
+          "type": "pricing",
+          "url": "Free"
+        }
+      ]
+    }
+  ],
+  "include": [
+
+  ],
+  "maintainer": [
+    {
+      "type": "Name",
+      "url": "Zenedith"
+    },
+    {
+      "type": "email",
+      "url": "contact@vehicle-history.io"
+    },
+    {
+      "type": "twitter",
+      "url": "https://twitter.com/vehiclehistory_/"
+    }
+  ],
+  "tags": "government, API, Application Programming Interface, developer, facilities, programs, press",
+  "modified": "04/07/2014"
+}
