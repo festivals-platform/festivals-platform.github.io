@@ -1,4 +1,4 @@
-vehicle-history developers portal
+festivals-platform developers portal
 ====================
 
 ## Using JavaScript and Bower
