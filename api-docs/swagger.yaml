@@ -5,14 +5,18 @@ info:
   version: 1.0.0
   title: festivals
 tags:
+  - name: news
+    description: Operation about news
   - name: festivals
     description: Operation about festivals
-  - name: events
+  - name: festivals-events
     description: Operation about festival events
-  - name: categories
+  - name: festivals-categories
     description: Operation about festival categories
-  - name: places
+  - name: festivals-places
     description: Operation about festival places
+  - name: festivals-news
+    description: Operation about festival news
 schemes:
   - https
 produces:
@@ -22,29 +26,19 @@ security:
   - oauth2token:
     - public
 paths:
-  /festivals:
+  /news:
     get:
       tags:
-        - festivals
-      summary: Find festivals
-      description: Get festivals collection
-      operationId: getFestivals
+        - news
+      summary: Find news
+      description: Get news collection
+      operationId: getNewsCollection
       produces:
         - application/vnd.festivals.v1+json
       security:
         - oauth2token:
-          - festivals:get
+          - news:get
       parameters:
-        - name: name
-          description: name
-          required: false
-          type: string
-          in: query
-        - name: startAt
-          description: startAt
-          required: false
-          type: string
-          in: query
         - name: updatedAt
           description: updatedAt
           required: false
@@ -66,10 +60,218 @@ paths:
           required: false
           type: string
           in: query
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/NewsCollectionResponse"
+    post:
+      tags:
+        - news
+      summary: Create news
+      description: Create news
+      operationId: createNews
+      consumes:
+        - application/vnd.festivals.v1+json
+      produces:
+        - application/vnd.festivals.v1+json
+      security:
+        - oauth2token:
+          - news:create
+      parameters:
+        - in: body
+          name: newsRequest
+          description: News object
+          required: true
+          schema:
+            $ref: "#/definitions/NewsRequest"
+      responses:
+        "201":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/NewsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "406":
+          description: The request you made is not acceptable
+        "422":
+          description: Invalid parameter value
+  "/news/{news.id}":
+    get:
+      tags:
+        - news
+      summary: Get news
+      description: Get news
+      operationId: getNews
+      produces:
+        - application/vnd.festivals.v1+json
+      security:
+        - oauth2token:
+          - news:get
+      parameters:
+        - name: id
+          in: path
+          description: News id
+          required: true
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/NewsResponse"
+        "404":
+          description: News not found
+    delete:
+      tags:
+        - news
+      summary: Delete news
+      description: Delete news
+      operationId: deleteNews
+      security:
+        - oauth2token:
+          - news:delete
+      parameters:
+        - name: id
+          in: path
+          description: News id
+          required: true
+          type: string
+      responses:
+        "204":
+          description: successful operation
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: News not found
+    put:
+      tags:
+        - news
+      summary: Update news
+      description: Update news
+      operationId: updateNews
+      consumes:
+        - application/vnd.festivals.v1+json
+      produces:
+        - application/vnd.festivals.v1+json
+      security:
+        - oauth2token:
+          - news:update
+      parameters:
+        - name: id
+          in: path
+          description: News id
+          required: true
+          type: string
+        - in: body
+          name: newsRequest
+          description: News object
+          required: true
+          schema:
+            $ref: "#/definitions/NewsRequest"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/NewsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: News not found
+        "406":
+          description: The request you made is not acceptable
+        "422":
+          description: Invalid parameter value
+  /festivals:
+    get:
+      tags:
+        - festivals
+      summary: Find festivals
+      description: Get festivals collection
+      operationId: getFestivals
+      produces:
+        - application/vnd.festivals.v1+json
+      security:
+        - oauth2token:
+          - festivals:get
+      parameters:
+        - name: name
+          description: name
+          required: false
+          type: string
+          in: query
+        - name: description
+          description: description
+          required: false
+          type: string
+          in: query
         - name: type
           description: type
           required: false
           type: string
+          default: FANTASY
+          enum:
+            - FANTASY
+          in: query
+        - name: tag
+          description: tag
+          required: false
+          type: string
+          in: query
+        - name: dateFrom
+          description: dateFrom
+          required: false
+          type: string
+          in: query
+        - name: dateTo
+          description: dateTo
+          required: false
+          type: string
+          in: query
+        - name: location.country
+          description: location country
+          required: false
+          type: string
+          in: query
+        - name: location.name
+          description: location name
+          required: false
+          type: string
+          in: query
+        - name: location.city
+          description: location city
+          required: false
+          type: string
+          in: query
+        - name: location.state
+          description: location state
+          required: false
+          type: string
+          in: query
+        - name: updatedAt
+          description: updatedAt
+          required: false
+          type: string
+          in: query
+        - name: limit
+          description: limit
+          required: false
+          type: integer
+          in: query
+          default: 100
+        - name: offset
+          description: offset
+          required: false
+          type: integer
           in: query
       responses:
         "200":
@@ -205,7 +407,7 @@ paths:
   "/festivals/{id}/events":
     get:
       tags:
-        - events
+        - festivals-events
       summary: Get festival events
       description: Get festival events collection
       operationId: getFestivalEvents
@@ -225,28 +427,43 @@ paths:
           required: false
           type: string
           in: query
-        - name: place
-          description: place
+        - name: description
+          description: description
           required: false
           type: string
           in: query
-        - name: startAt
-          description: startAt
+        - name: place.name
+          description: place name
           required: false
           type: string
           in: query
-        - name: finishAt
-          description: finishAt
+        - name: category.name
+          description: category name
+          required: false
+          type: string
+          in: query
+        - name: dateFrom
+          description: dateFrom
+          required: false
+          type: string
+          in: query
+        - name: dateTo
+          description: dateTo
+          required: false
+          type: string
+          in: query
+        - name: author.name
+          description: author name
+          required: false
+          type: string
+          in: query
+        - name: author.organization
+          description: author organization
           required: false
           type: string
           in: query
         - name: updatedAt
           description: updatedAt
-          required: false
-          type: string
-          in: query
-        - name: category
-          description: category
           required: false
           type: string
           in: query
@@ -270,7 +487,7 @@ paths:
           description: Not found
     post:
       tags:
-        - events
+        - festivals-events
       summary: Create festival events
       description: Create festival events
       operationId: createFestivalEvent
@@ -313,7 +530,7 @@ paths:
   "/festivals/{id}/events/{event.id}":
     get:
       tags:
-        - events
+        - festivals-events
       summary: Get festival event
       description: Get festival event collection
       operationId: getFestivalEvent
@@ -340,7 +557,7 @@ paths:
             $ref: "#/definitions/EventResponse"
     delete:
       tags:
-        - events
+        - festivals-events
       summary: Delete festival event
       description: Delete festival events
       operationId: deleteFestivalEvent
@@ -369,7 +586,7 @@ paths:
           description: Not found
     put:
       tags:
-        - events
+        - festivals-events
       summary: Update festival events
       description: Update festival events
       operationId: updateFestivalEvent
@@ -415,7 +632,7 @@ paths:
   "/festivals/{id}/categories":
     get:
       tags:
-        - categories
+        - festivals-categories
       summary: Get festival categories
       description: Get festival categories collection
       operationId: getFestivalCategories
@@ -465,7 +682,7 @@ paths:
           description: Festival not found
     post:
       tags:
-        - categories
+        - festivals-categories
       summary: Create festival category
       description: Create festival category
       operationId: createFestivalCategory
@@ -508,7 +725,7 @@ paths:
   "/festivals/{id}/categories/{category.id}":
     get:
       tags:
-        - categories
+        - festivals-categories
       summary: Get festival category
       description: Get festival category
       operationId: getFestivalCategory
@@ -537,7 +754,7 @@ paths:
           description: Not found
     delete:
       tags:
-        - categories
+        - festivals-categories
       summary: Delete festival category
       description: Delete festival category
       operationId: deleteFestivalCategory
@@ -566,7 +783,7 @@ paths:
           description: Not found
     put:
       tags:
-        - categories
+        - festivals-categories
       summary: Update festival category
       description: Update festival category
       operationId: updateFestivalCategory
@@ -614,7 +831,7 @@ paths:
   "/festivals/{id}/places":
     get:
       tags:
-        - places
+        - festivals-places
       summary: Get festival places
       description: Get festival places collection
       operationId: getFestivalPlaces
@@ -664,7 +881,7 @@ paths:
           description: Festival not found
     post:
       tags:
-        - places
+        - festivals-places
       summary: Create festival place
       description: Create festival place
       operationId: createFestivalPlace
@@ -707,7 +924,7 @@ paths:
   "/festivals/{id}/places/{place.id}":
     get:
       tags:
-        - places
+        - festivals-places
       summary: Get festival place
       description: Get festival place
       operationId: getFestivalPlace
@@ -736,7 +953,7 @@ paths:
           description: Festival not found
     delete:
       tags:
-        - places
+        - festivals-places
       summary: Delete festival place
       description: Delete festival place
       operationId: deleteFestivalPlace
@@ -765,7 +982,7 @@ paths:
           description: Not found
     put:
       tags:
-        - places
+        - festivals-places
       summary: Update festival place
       description: Update festival place
       operationId: updateFestivalPlace
@@ -810,13 +1027,218 @@ paths:
           description: The request you made is not acceptable
         "422":
           description: Invalid parameter value
+  "/festivals/{id}/news":
+    get:
+      tags:
+        - festivals-news
+      summary: Find festival news
+      description: Get festival news collection
+      operationId: getFestivalNewsCollection
+      produces:
+        - application/vnd.festivals.v1+json
+      security:
+        - oauth2token:
+          - news:get
+      parameters:
+        - name: id
+          in: path
+          description: Festival id
+          required: true
+          type: string
+        - name: updatedAt
+          description: updatedAt
+          required: false
+          type: string
+          in: query
+        - name: limit
+          description: limit
+          required: false
+          type: integer
+          in: query
+          default: 100
+        - name: offset
+          description: offset
+          required: false
+          type: integer
+          in: query
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/NewsCollectionResponse"
+    post:
+      tags:
+        - festivals-news
+      summary: Create news
+      description: Create news
+      operationId: createNews
+      consumes:
+        - application/vnd.festivals.v1+json
+      produces:
+        - application/vnd.festivals.v1+json
+      security:
+        - oauth2token:
+          - news:create
+      parameters:
+        - name: id
+          in: path
+          description: Festival id
+          required: true
+          type: string
+        - in: body
+          name: newsRequest
+          description: News object
+          required: true
+          schema:
+            $ref: "#/definitions/NewsRequest"
+      responses:
+        "201":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/NewsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "406":
+          description: The request you made is not acceptable
+        "422":
+          description: Invalid parameter value
+  "/festivals/{id}/news/{news.id}":
+    get:
+      tags:
+        - festivals-news
+      summary: Get news
+      description: Get news
+      operationId: getNews
+      produces:
+        - application/vnd.festivals.v1+json
+      security:
+        - oauth2token:
+          - news:get
+      parameters:
+        - name: id
+          in: path
+          description: Festival id
+          required: true
+          type: string
+        - name: news.id
+          in: path
+          description: News id
+          required: true
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/NewsResponse"
+        "404":
+          description: News not found
+    delete:
+      tags:
+        - festivals-news
+      summary: Delete news
+      description: Delete news
+      operationId: deleteNews
+      security:
+        - oauth2token:
+          - news:delete
+      parameters:
+        - name: id
+          in: path
+          description: Festival id
+          required: true
+          type: string
+        - name: news.id
+          in: path
+          description: News id
+          required: true
+          type: string
+      responses:
+        "204":
+          description: successful operation
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: News not found
+    put:
+      tags:
+        - festivals-news
+      summary: Update news
+      description: Update news
+      operationId: updateNews
+      consumes:
+        - application/vnd.festivals.v1+json
+      produces:
+        - application/vnd.festivals.v1+json
+      security:
+        - oauth2token:
+          - news:update
+      parameters:
+        - name: id
+          in: path
+          description: Festival id
+          required: true
+          type: string
+        - name: news.id
+          in: path
+          description: News id
+          required: true
+          type: string
+        - in: body
+          name: newsRequest
+          description: News object
+          required: true
+          schema:
+            $ref: "#/definitions/NewsRequest"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/NewsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: News not found
+        "406":
+          description: The request you made is not acceptable
+        "422":
+          description: Invalid parameter value
 securityDefinitions:
   oauth2token:
     type: oauth2
     flow: implicit
     authorizationUrl: https://vehicle-history.io/oauth/authorization
     scopes:
-      user: user auth scope
+      public: public API scope
+      news:update: permission to update news
+      news:delete: permission to delete news
+      news:get: permission to get news
+      news:create: permission to create news
+      places:update: permission to update places
+      places:delete: permission to delete places
+      places:get: permission to get places
+      places:create: permission to create places
+      categories:update: permission to update categories
+      categories:delete: permission to delete categories
+      categories:get: permission to get categories
+      categories:create: permission to create categories
+      events:update: permission to update events
+      events:delete: permission to delete events
+      events:get: permission to get events
+      events:create: permission to create events
+      festivals:update: permission to update festivals
+      festivals:delete: permission to delete festivals
+      festivals:get: permission to get festivals
+      festivals:create: permission to create festivals
 definitions:
   CoordinatesRequest:
     properties:
@@ -912,6 +1334,9 @@ definitions:
       street:
         type: string
         description: Location street
+      city:
+        type: string
+        description: Location city
       zip:
         type: string
         description: Location zip
@@ -944,6 +1369,9 @@ definitions:
       street:
         type: string
         description: Location street
+      city:
+        type: string
+        description: Location city
       zip:
         type: string
         description: Location zip
@@ -1007,6 +1435,9 @@ definitions:
       coordinates:
         $ref: "#/definitions/CoordinatesResponse"
         description: Coordinates
+      mainImage:
+        $ref: "#/definitions/MainImageResponse"
+        description: Event main image
       createdAt:
         type: string
         description: Festival place createdAt
@@ -1033,15 +1464,21 @@ definitions:
         type: array
         description: Festival place opening times
         items:
-          $ref: "#/definitions/Duration"
+          $ref: "#/definitions/DurationRequest"
       coordinates:
         $ref: "#/definitions/CoordinatesRequest"
         description: Coordinates
+      images:
+        type: array
+        items:
+          $ref: "#/definitions/ImageRequest"
+        description: Images
     description: Festival response
     required:
       - name
       - parent
       - openingTimes
+      - images
   EventPlaceResponse:
     properties:
       id:
@@ -1158,7 +1595,7 @@ definitions:
       authors:
         type: array
         items:
-          $ref: "#/definitions/AuthorResponse"
+          $ref: "#/definitions/AuthorRequest"
         description: Event authors
     description: Event request
     required:
@@ -1345,7 +1782,7 @@ definitions:
     properties:
       total:
         type: integer
-        description: Total festival categories
+        description: Total festival places
       places:
         type: array
         items:
@@ -1354,3 +1791,84 @@ definitions:
     required:
       - total
       - places
+  NewsResponse:
+    properties:
+      id:
+        type: string
+        description: News id
+      name:
+        type: string
+        description: News name
+      description:
+        type: string
+        description: News description
+      mainImage:
+        $ref: "#/definitions/MainImageResponse"
+        description: Main image
+      authors:
+        type: array
+        items:
+          $ref: "#/definitions/AuthorResponse"
+        description: Event authors
+      tags:
+        type: array
+        items:
+          type: string
+        description: News tags
+      createdAt:
+        type: string
+        description: News createdAt
+      updatedAt:
+        type: string
+        description: News updatedAt
+    description: News response
+    required:
+      - id
+      - name
+      - description
+      - mainImage
+      - tags
+      - createdAt
+      - updatedAt
+  NewsRequest:
+    properties:
+      name:
+        type: string
+        description: News name
+      description:
+        type: string
+        description: News description
+      images:
+        type: array
+        items:
+          $ref: "#/definitions/ImageRequest"
+        description: Images
+      authors:
+        type: array
+        items:
+          $ref: "#/definitions/AuthorRequest"
+        description: Event authors
+      tags:
+        type: array
+        items:
+          type: string
+        description: News tags
+    description: News request
+    required:
+      - name
+      - description
+      - images
+      - tags
+  NewsCollectionResponse:
+    properties:
+      total:
+        type: integer
+        description: Total news collection
+      news:
+        type: array
+        items:
+          $ref: "#/definitions/NewsResponse"
+    description: News collection
+    required:
+      - total
+      - news
