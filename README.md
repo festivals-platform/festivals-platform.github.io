@@ -1,4 +1,4 @@
-festivals-platform developers portal
+festivals-tech developers portal
 ====================
 
 ## Using JavaScript and Bower
